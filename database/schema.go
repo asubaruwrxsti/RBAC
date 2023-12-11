@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func CreateProductTable() {
+func CreateTables() {
 	dbObject, err := DB.DB()
 	if err != nil {
 		fmt.Println(err)

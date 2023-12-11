@@ -55,5 +55,8 @@ func Connect() error {
 		return errors.New("ping database error")
 	}
 
+	// From schema.go, create tables
+	CreateTables()
+
 	return nil
 }
