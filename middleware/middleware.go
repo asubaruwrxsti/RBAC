@@ -37,7 +37,7 @@ func RequestToken() func(*fiber.Ctx) error {
 
 			// Get the user group
 			var userGroup string
-			row = dbConn.Table("user_groups").Select("name").Where("user_id = ?", userId).Row()
+			row = dbConn.Table("user_groups").Select("id").Where("user_id = ?", userId).Row()
 			err = row.Scan(&userGroup)
 			if err != nil {
 				log.Print("<< Auth middleware: ", err)
