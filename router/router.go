@@ -7,9 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// SetupRoutes func
 func SetupRoutes(app *fiber.App) {
-	// Public routes
 	app.Get("/", handler.Home)
-	app.Get("/auth", middleware.Auth())
+	app.Get("/auth", middleware.RequestToken())
 }
