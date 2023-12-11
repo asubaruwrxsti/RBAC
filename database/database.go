@@ -1,13 +1,12 @@
 package database
 
 import (
+	"RBAC/config"
 	"errors"
 	"fmt"
 	"log"
 	"os"
 	"time"
-
-	"RBAC/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -32,12 +31,17 @@ func Connect() error {
 		},
 	)
 
-	dsn := fmt.Sprintf("mysql://%s@%s:%s/%s?sslmode=disable",
+	dsn := fmt.Sprintf("%s:%s@%s(%s)/%s?charset=%s&parseTime=%s&loc=%s",
 		config.Config("DB_USER"),
+		config.Config("DB_PASSWORD"),
+		"tcp",
 		config.Config("DB_HOST"),
-		config.Config("DB_PORT"),
 		config.Config("DB_NAME"),
+		"utf8",
+		"True",
+		"Local",
 	)
+
 	log.Print(">> dsn: ", dsn)
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
