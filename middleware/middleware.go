@@ -9,14 +9,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-// Auth middleware
-// @Summary Auth middleware
-// @Description Auth middleware
-// @Tags middleware
-// @Accept json
-// @Produce json
-// @Router /auth [post]
-func Auth() func(*fiber.Ctx) error {
+func RequestToken() func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 		username := config.Config("AUTH_USERNAME")
 		password := config.Config("AUTH_PASSWORD")
@@ -45,14 +38,7 @@ func Auth() func(*fiber.Ctx) error {
 	}
 }
 
-// AuthReq middleware
-// @Summary AuthReq middleware
-// @Description AuthReq middleware
-// @Tags middleware
-// @Accept json
-// @Produce json
-// @Router /api [get]
-func AuthReq() func(*fiber.Ctx) error {
+func VerifyToken() func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 		log.Print(">> Inside AuthReq middleware")
 		tokenString := c.Get("Authorization")
