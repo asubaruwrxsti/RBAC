@@ -31,11 +31,12 @@ func Connect() error {
 		},
 	)
 
-	dsn := fmt.Sprintf("%s:%s@%s(%s)/%s?charset=%s&parseTime=%s&loc=%s",
+	dsn := fmt.Sprintf("%s:%s@%s(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s",
 		config.Config("DB_USER"),
 		config.Config("DB_PASSWORD"),
 		"tcp",
 		config.Config("DB_HOST"),
+		config.Config("DB_PORT"),
 		config.Config("DB_NAME"),
 		"utf8",
 		"True",
