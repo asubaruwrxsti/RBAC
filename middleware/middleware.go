@@ -3,6 +3,7 @@ package middleware
 import (
 	"RBAC/config"
 	"RBAC/database"
+	"RBAC/model"
 	"log"
 	"time"
 
@@ -22,36 +23,36 @@ func RequestToken() func(*fiber.Ctx) error {
 		if c.FormValue("username") == username && c.FormValue("password") == password {
 
 			// Get the user id
-			var userId int
+			user := model.User{}
 			row := dbConn.Table("users").Select("id").Where("full_name = ?", username).Row()
-			err := row.Scan(&userId)
+			err := row.Scan(&user.ID)
 			if err != nil {
 				log.Print("<< Auth middleware: ", err)
 				return c.SendStatus(fiber.StatusUnauthorized)
 			}
 
-			if userId == 0 {
+			if user.ID == 0 {
 				log.Print("<< Auth middleware: userId is 0")
 				return c.SendStatus(fiber.StatusUnauthorized)
 			}
 
 			// Get the user group
-			var userGroup string
-			row = dbConn.Table("user_groups").Select("id").Where("user_id = ?", userId).Row()
-			err = row.Scan(&userGroup)
+			userGroup := model.Group{}
+			row = dbConn.Table("user_groups").Select("id").Where("user_id = ?", user.ID).Row()
+			err = row.Scan(&userGroup.ID)
 			if err != nil {
 				log.Print("<< Auth middleware: ", err)
 				return c.SendStatus(fiber.StatusInternalServerError)
 			}
 
-			if userGroup == "" {
+			if userGroup.ID == 0 {
 				log.Print("<< Auth middleware: userGroup is empty")
 				return c.SendStatus(fiber.StatusUnauthorized)
 			}
 
 			// Create a new token object, specifying signing method and the claims
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-				"userId":  userId,
+				"userId":  user.ID,
 				"groupId": userGroup,
 				"iss":     "your_issuer", // Set the issuer
 				"exp":     time.Now().Add(time.Hour * 72).Unix(),
