@@ -9,9 +9,8 @@ type (
 		Category    string `json:"category"`
 		Amount      int    `json:"amount"`
 	}
-)
 
-// Products struct
-type Products struct {
-	Products []Product `json:"products"`
-}
+	Products struct {
+		Products []Product `json:"products"`
+	}
+)
