@@ -9,7 +9,7 @@ import (
 
 	"RBAC/config"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -32,16 +32,14 @@ func Connect() error {
 		},
 	)
 
-	// TODO: use the config package to get the database credentials
-	// dsn := "postgresql://root@db:26257/test?sslmode=disable"
-	dsn := fmt.Sprintf("postgresql://%s@%s:%s/%s?sslmode=disable",
+	dsn := fmt.Sprintf("mysql://%s@%s:%s/%s?sslmode=disable",
 		config.Config("DB_USER"),
 		config.Config("DB_HOST"),
 		config.Config("DB_PORT"),
 		config.Config("DB_NAME"),
 	)
 	log.Print(">> dsn: ", dsn)
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})
 	if err != nil {
