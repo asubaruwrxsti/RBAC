@@ -60,8 +60,9 @@ func Connect() error {
 		return errors.New("ping database error")
 	}
 
-	// From schema.go, create tables
+	// From schema.go, create tables and insert data
 	CreateTables()
+	InsertData()
 
 	return nil
 }
