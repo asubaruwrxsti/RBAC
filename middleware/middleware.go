@@ -31,6 +31,8 @@ func RequestToken() func(*fiber.Ctx) error {
 				return c.SendStatus(fiber.StatusUnauthorized)
 			}
 
+			// TODO: need better error handling
+			// user.ID might not be 0 if the user is not found
 			if user.ID == 0 {
 				log.Print("<< Auth middleware: userId is 0")
 				return c.SendStatus(fiber.StatusUnauthorized)
@@ -45,6 +47,8 @@ func RequestToken() func(*fiber.Ctx) error {
 				return c.SendStatus(fiber.StatusInternalServerError)
 			}
 
+			// TODO: need better error handling
+			// userGroup.ID might not be 0 if the user is not found
 			if userGroup.ID == 0 {
 				log.Print("<< Auth middleware: userGroup is empty")
 				return c.SendStatus(fiber.StatusUnauthorized)
@@ -54,7 +58,7 @@ func RequestToken() func(*fiber.Ctx) error {
 			// TODO: how to refresh the token ?
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 				"userId":  user.ID,                               // Custom claims
-				"groupId": userGroup,                             // Custom claims
+				"groupId": userGroup.ID,                          // Custom claims
 				"iss":     "your_issuer",                         // Set the issuer
 				"exp":     time.Now().Add(time.Hour * 72).Unix(), // Set the expiration time
 			})
@@ -103,11 +107,11 @@ func VerifyToken() func(*fiber.Ctx) error {
 			}
 		}
 
-		log.Print("<< AuthReq middleware token.Valid: ", token.Valid)
 		if !token.Valid {
 			// Invalid token, return error
 			return c.SendStatus(fiber.StatusUnauthorized)
 		}
+		log.Print("<< AuthReq middleware token.Valid: ", token.Valid)
 
 		// Token is valid, proceed with the request
 		return c.Next()
