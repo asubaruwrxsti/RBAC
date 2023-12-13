@@ -65,23 +65,25 @@ func InsertData() {
 
 	// Insert data into products table
 	dbObject.Exec(`
-	INSERT INTO products (name, description, category, amount) VALUES
-	("Apple", "iPhone 12", "Mobile", 100),
-	("Samsung", "Galaxy S21", "Mobile", 100),
-	("Samsung", "Galaxy S20", "Mobile", 100),
-	("Samsung", "Galaxy S10", "Mobile", 100),
-	("Samsung", "Galaxy S9", "Mobile", 100),
-	`)
+        INSERT INTO products (name, description, category, amount) VALUES
+        ("Apple", "iPhone 12", "Mobile", 100),
+        ("Samsung", "Galaxy S21", "Mobile", 100),
+        ("Samsung", "Galaxy S20", "Mobile", 100),
+        ("Samsung", "Galaxy S10", "Mobile", 100),
+        ("Samsung", "Galaxy S9", "Mobile", 100)
+    `)
 
 	// Insert data into users table
 	dbObject.Exec(`
-	INSERT INTO users (full_name, email, password) VALUES
-	("test", "test@test.com", "test")
-	`)
+        INSERT INTO users (full_name, email, password) VALUES
+        ("test", "test@test.com", "test"),
+        ("admin", "admin@test.com", "admin")
+    `)
 
 	// Insert data into groups table
 	dbObject.Exec(`
-	INSERT INTO user_groups (name, description, permissions, user_id) VALUES
-	("admin", "Admin group", "read,write,delete", 1)
-	`)
+        INSERT INTO user_groups (name, description, permissions, user_id) VALUES
+        ("admin", "Admin group", "read,write,delete", 1),
+        ("user", "User group", "read", 2)
+    `)
 }
