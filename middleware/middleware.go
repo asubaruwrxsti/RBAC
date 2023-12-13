@@ -51,11 +51,12 @@ func RequestToken() func(*fiber.Ctx) error {
 			}
 
 			// Create a new token object, specifying signing method and the claims
+			// TODO: how to refresh the token ?
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-				"userId":  user.ID,
-				"groupId": userGroup,
-				"iss":     "your_issuer", // Set the issuer
-				"exp":     time.Now().Add(time.Hour * 72).Unix(),
+				"userId":  user.ID,                               // Custom claims
+				"groupId": userGroup,                             // Custom claims
+				"iss":     "your_issuer",                         // Set the issuer
+				"exp":     time.Now().Add(time.Hour * 72).Unix(), // Set the expiration time
 			})
 
 			// Sign and get the complete encoded token as a string using the secret
@@ -85,16 +86,14 @@ func VerifyToken() func(*fiber.Ctx) error {
 		// Parse the token
 		tokenString = tokenString[7:]
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			// Make sure that the token method conforms to "SigningMethodHMAC"
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fiber.ErrUnauthorized
-			}
+			// TODO: perhaps check the signing method too ?
 			return []byte(config.Config("JWT_SECRET")), nil
 		})
 		log.Printf("<< AuthReq middleware token: %+v\n", token)
-		log.Printf("<< AuthReq middleware err: %+v\n", err)
 
 		if err != nil {
+			log.Printf(">> AuthReq middleware err: %+v\n", err)
+
 			// Handle specific errors, e.g., token expired, issuer mismatch, etc.
 			switch err.(type) {
 			case *jwt.ValidationError:
