@@ -18,7 +18,13 @@ func VerifyToken() func(*fiber.Ctx) error {
 
 		// Parse the token
 		// Remove Bearer from token (first 7 characters)
-		tokenString = tokenString[7:]
+		if len(tokenString) > len("Bearer ") && tokenString[:len("Bearer ")] == "Bearer " {
+			// Remove the "Bearer " prefix
+			tokenString = tokenString[len("Bearer "):]
+		} else {
+			// If the prefix is not present, handle it accordingly
+			return c.SendStatus(fiber.StatusUnauthorized)
+		}
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			// Applying the signing method check
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
