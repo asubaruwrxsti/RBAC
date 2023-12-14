@@ -11,6 +11,7 @@ func Home(c *fiber.Ctx) error {
 
 func ParseToken(c *fiber.Ctx) error {
 	// Read the value of the "Authorization" header, slice the bearer
+	// TODO: Should i add a check here ?
 	token := c.Get("Authorization")[7:]
 
 	// Parse the JWT token
