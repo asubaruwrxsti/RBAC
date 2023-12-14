@@ -10,22 +10,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRequestToken(t *testing.T) {
-	// Create a Fiber app with the middleware
+func TestRequestToken_Correct_Username_Password(t *testing.T) {
 	app := fiber.New()
 	app.Use(RequestToken())
 
-	// Test case 1: Correct username and password
-	req1 := httptest.NewRequest(http.MethodPost, "/authreq", strings.NewReader("username=test&password=test"))
-	req1.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp1, err := app.Test(req1)
+	req := httptest.NewRequest(http.MethodPost, "/authreq", strings.NewReader("username=test&password=test"))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := app.Test(req)
 	assert.NoError(t, err)
-	assert.Equal(t, http.StatusUnauthorized, resp1.StatusCode)
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+}
 
-	// Test case 2: Incorrect username and password
-	req2 := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader("username=test&password=wrongpassword"))
-	req2.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp2, err := app.Test(req2)
+func TestRequestToken_Incorrect_Username_Password(t *testing.T) {
+	app := fiber.New()
+	app.Use(RequestToken())
+
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader("username=test&password=wrongpassword"))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := app.Test(req)
 	assert.NoError(t, err)
-	assert.Equal(t, http.StatusUnauthorized, resp2.StatusCode)
+	assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
 }
