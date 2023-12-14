@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -21,7 +19,6 @@ func ParseToken(c *fiber.Ctx) error {
 	})
 	// Check if the token is valid
 	if !parsedToken.Valid {
-		fmt.Println("Token is invalid")
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
 
@@ -29,7 +26,6 @@ func ParseToken(c *fiber.Ctx) error {
 	groupId := int(parsedToken.Claims.(jwt.MapClaims)["groupId"].(float64))
 
 	if err != nil {
-		fmt.Printf("Error parsing token: %v\n", err)
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 

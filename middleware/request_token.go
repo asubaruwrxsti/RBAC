@@ -4,7 +4,6 @@ import (
 	"RBAC/config"
 	"RBAC/database"
 	"RBAC/model"
-	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,7 +25,6 @@ func RequestToken() func(*fiber.Ctx) error {
 			row := dbConn.Table("users").Select("id").Where("full_name = ?", username).Row()
 			err := row.Scan(&user.ID)
 			if err != nil {
-				log.Print("<< Auth middleware: ", err)
 				return c.SendStatus(fiber.StatusUnauthorized)
 			}
 
@@ -35,7 +33,6 @@ func RequestToken() func(*fiber.Ctx) error {
 			row = dbConn.Table("user_groups").Select("id").Where("user_id = ?", user.ID).Row()
 			err = row.Scan(&userGroup.ID)
 			if err != nil {
-				log.Print("<< Auth middleware: ", err)
 				return c.SendStatus(fiber.StatusInternalServerError)
 			}
 

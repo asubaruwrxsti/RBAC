@@ -3,7 +3,6 @@ package middleware
 import (
 	"RBAC/config"
 	"errors"
-	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
@@ -11,7 +10,6 @@ import (
 
 func VerifyToken() func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		log.Print(">> Inside AuthReq middleware")
 		tokenString := c.Get("Authorization")
 		if tokenString == "" {
 			// No token, return error
