@@ -14,8 +14,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	dbConn := database.DB
+
 	app := fiber.New(fiber.Config{})
-	router.SetupRoutes(app)
+	router.SetupRoutes(app, dbConn)
 
 	log.Fatal(app.Listen(":3000"))
 }
