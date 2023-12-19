@@ -4,11 +4,6 @@ import "github.com/gofiber/fiber/v2"
 
 type MiddlewareFunc func(*fiber.Ctx) error
 
-type Middleware interface {
-	Use(MiddlewareFunc) Middleware
-	Apply(*fiber.Ctx) error
-}
-
 type Auth struct {
 	middlewareChain []MiddlewareFunc
 }
@@ -18,7 +13,7 @@ func NewAuth() *Auth {
 }
 
 // Use appends a middleware function to the middleware chain
-func (a *Auth) Use(mw MiddlewareFunc) Middleware {
+func (a *Auth) Use(mw MiddlewareFunc) *Auth {
 	a.middlewareChain = append(a.middlewareChain, mw)
 	return a
 }
